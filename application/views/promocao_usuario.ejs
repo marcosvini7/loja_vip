@@ -1,0 +1,125 @@
+
+<script type="text/javascript">
+	
+	function promover(id_usuario, acao){
+		var aut = $('#usuario_'+id_usuario).text()
+		var nivel = parseInt(aut.trim())
+		var operacao_valida = false
+
+		if(acao == 'promover'){
+			if((nivel += 1) < autoridade){
+				operacao_valida = true
+			}
+		}
+
+		if(acao == 'rebaixar'){
+			if((nivel -= 1) != 0){
+				operacao_valida = true
+			}	
+		}
+
+		if(operacao_valida){
+			$.ajax({
+				url: `/admin/promover/${id_usuario}/${nivel}`,
+				type: 'put',
+				success: data => { 
+					$('#usuario_'+id_usuario).html(nivel)
+				}
+			})
+		}			
+	}
+	
+	$(() => {
+
+	$('#botao_email').click((e) => {
+		e.preventDefault()
+		var email = $('#email').val()
+		if(email != ''){
+			$.ajax({
+				url: '/admin/buscar_usuario/'+email,
+				type: 'get',
+				success: data => {
+					if(data.nome != undefined && data.autoridade < autoridade){
+					$('#local_usuarios').html(`
+						<ul class="list-group col-12 ml-2 ml-md-0">
+							<li class="list-group-item">
+								<div class="d-flex align-items-center">
+								<h6>
+									<i class="far fa-user text-info"></i>
+									${data.nome}
+								</h6>
+								<h5 class="ml-auto ml-md-4">
+									<i onclick="promover('${data._id}', 'promover')" class="fas fa-arrow-up text-success mr-5 mr-md-2 mouse"></i>
+
+									<i onclick="promover('${data._id}', 'rebaixar')" class="fas fa-arrow-down text-danger mouse"></i>
+								</h5>
+								</div>
+								<h6>Email: ${data.email}</h6>
+								<h6>Autoridade: <spam id="usuario_${data._id}">${data.autoridade}</spam>
+								</h6>
+							</li>
+						</ul>
+					`)
+				}
+				}
+			})
+		}
+	})
+})
+
+</script>
+
+	<div class="container">
+		<form>		
+			<div class="d-flex justify-content-center">
+				<input id="email" class="form-control col-9" type="email" placeholder="Pesquisar usuário por e-mail">
+				<input id="botao_email" type="button" class="form-control btn btn-primary ml-2 col-2" value="Buscar">
+			</div>
+		</form>
+	</div>
+
+	<div class="row mt-5" id="local_usuarios">
+		<ul class="list-group ml-2 ml-md-0 col-md-6">
+			<% for(var i = 0; i < usuarios.length; i+=2){ %>
+				<li class="list-group-item">
+					<div class="d-flex align-items-center">
+						<h6>
+							<i class="far fa-user text-info"></i>
+							<%=usuarios[i].nome%>
+						</h6>
+						<h5 class="ml-auto ml-md-4">
+
+							<i onclick="promover('<%=usuarios[i]._id%>',   'promover')" class="fas fa-arrow-up text-success mr-5 mr-md-2 mouse"></i>
+
+							<i onclick="promover('<%=usuarios[i]._id%>',   'rebaixar')" class="fas fa-arrow-down text-danger mouse"></i>
+						</h5>
+					</div>
+					<h6>Email: <%=usuarios[i].email%></h6>
+					<h6>Autoridade: <spam id="usuario_<%=usuarios[i]._id%>">
+						<%=usuarios[i].autoridade%></spam></h6>
+				</li> 
+			<% } %>
+		</ul>
+
+		<ul class="list-group ml-2 ml-md-0 col-md-6">
+			<% for(var i = 1; i < usuarios.length; i+=2){ %>
+					<li class="list-group-item">
+					<div class="d-flex align-items-center">
+						<h6>
+							<i class="far fa-user text-info"></i>
+							<%=usuarios[i].nome%>
+						</h6>
+						<h5 class="ml-auto ml-md-4">
+
+							<i onclick="promover('<%=usuarios[i]._id%>',   'promover')" class="fas fa-arrow-up text-success mr-5 mr-md-2 mouse"></i>
+
+							<i onclick="promover('<%=usuarios[i]._id%>',   'rebaixar')" class="fas fa-arrow-down text-danger mouse"></i>	
+						</h5>
+					</div>
+					<h6>Email: <%=usuarios[i].email%></h6>
+					<h6>Autoridade: <span id="usuario_<%=usuarios[i]._id%>"><%=usuarios[i].autoridade%></span></h6>
+				</li>
+			<% } %>
+		</ul>
+	</div>
+</div>

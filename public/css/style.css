@@ -1,0 +1,63 @@
+.logo {
+	color:  #F781BE;
+	font-family: fantasy;
+	text-decoration: none;
+	font-size: 1.8em;
+}
+
+.logo:hover{
+	text-decoration: none;
+	color: #A9BCF5;
+}
+
+.bg-yellow {
+	background: #F7F2E0;
+}
+
+nav h6{
+	font-size: 1.1em;
+}
+
+#home h3{
+	color: #2A1B0A;
+}
+
+#home {
+	font-family: Comic Sams MS;
+}
+
+#home li{
+	font-size: 1.2em;
+}
+
+footer{
+	background: #F7F2E0;
+	margin-top: 50px;
+	padding: 15px;
+}
+
+
+.texto_descricao{
+	font-size: 1.2em;
+}
+.margem_navbar{
+	margin-right: 150px;
+}
+.inline{
+	display: inline;
+}
+.hover_categoria:hover{
+	opacity: 0.6;
+	cursor: pointer;
+}
+.cor_carrinho{
+	color: #D8D8D8;
+}
+.mouse{
+	cursor: pointer;
+}
+.removido{
+	opacity: 0.5;
+}.data {
+	font-size: 0.9em;
+}

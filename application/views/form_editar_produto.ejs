@@ -1,0 +1,81 @@
+
+	<script type="text/javascript">
+		$(() => {
+
+			$('#botao_verificar_produto').click(() => {
+
+				let id_produto = $('#id_produto').val()
+				if(id_produto.length > 0){
+				$.ajax({
+					url: `/admin/verificar_produto/${id_produto}`,
+					type: 'get',
+					success: data => {
+			
+						if(data[0]){
+							$('#area_edicao').load('/admin/form_edicao_produto', () => {
+
+								$('#id').val(data[0]._id)
+								$('#imagem_anterior').val(data[0].imagem)
+								$('#titulo').val(data[0].titulo)
+								$('#resumo').val(data[0].resumo)
+								$('#categoria').val(data[0].categoria)
+								$('#descricao').val(data[0].descricao)
+								$('#valor').val(data[0].valor)
+								$('#quantidade').val(data[0].quantidade)
+							})
+						} else {
+							$('#modal').show()							
+						}
+					}
+				})
+				}
+			})
+
+			$('#entendi').click(() => {
+				$('#modal').hide()
+			})
+
+			$('#close').click(() => {
+				$('#modal').hide()
+			})
+		 
+		})
+	</script>
+
+	<form>
+		<div class="d-flex justify-content-center">
+			<input id="id_produto" class="form-control col-9" type="text" placeholder="Digite o id do produto..." name="id_produto">
+			<input id="botao_verificar_produto" type="button" class="form-control btn btn-primary ml-2 col-2" value="Buscar">		
+		</div>
+	</form>
+
+	<div style="height: 50px">
+		
+	</div>
+
+	<div id="area_edicao">
+
+		<div style="height: 230px">
+			
+		</div>
+	</div>
+
+
+<div id="modal" class="modal" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 id="titulo" class="modal-title text-info" id="exampleModalLabel">Ops!</h5>
+        <button id="close" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="body">
+        Nenhum produto foi encontrado!
+      </div>
+      <div class="modal-footer">
+        <button id="entendi" type="button" class="btn btn-info">Entendi</button>
+      </div>
+    </div>
+  </div>
+</div>

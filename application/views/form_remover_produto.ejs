@@ -1,0 +1,91 @@
+
+	<script type="text/javascript">
+		$(() => {
+
+			$('#botao_verificar_produto').click(() => {
+
+				let id_produto = $('#id_produto').val()
+				if(id_produto.length > 0){
+				$.ajax({
+					url: `/admin/verificar_produto/${id_produto}`,
+					type: 'get',
+					success: data => {
+				
+						if(data[0]){
+							$('#titulo').html("<span class='text-danger'>Atenção!</span>")
+							$('#body').html(`Tem certeza que deseja excluir o produto: <b>${data[0].titulo}</b> ?`)
+							$('#entendi').hide()
+							$('#cancelar').show()
+							$('#confirmar').show()
+						} else {
+							$('#titulo').html("<span class='text-info'>Ops!</span>")
+							$('#body').html('Nenhum produto foi encontrado!')
+							$('#entendi').show()
+							$('#cancelar').hide()
+							$('#confirmar').hide()
+						}
+
+						$('#modal').show()
+
+						$('#confirmar').click(() => {
+							$('#modal').hide()
+
+							$.ajax({
+								url: `/admin/remover_produto/${id_produto}/${data[0].imagem}`,
+								type: 'delete',							
+							})
+
+							window.location.href = '/admin'
+						})
+					}
+				})
+				}
+			})
+
+			$('#cancelar').click(() => {
+				$('#modal').hide()
+			})
+
+			$('#entendi').click(() => {
+				$('#modal').hide()
+			})
+
+			$('#close').click(() => {
+				$('#modal').hide()
+			})
+		 
+		})
+	</script>
+
+	<form>		
+		<div class="d-flex justify-content-center">
+			<input id="id_produto" class="form-control col-9" type="text" placeholder="Digite o id do produto..." name="id_produto">
+			<input id="botao_verificar_produto" type="button" class="form-control btn btn-primary ml-2 col-2" value="Remover">
+		</div>
+	</form>
+
+	<div style="height: 230px">
+		
+	</div>
+
+
+<div id="modal" class="modal" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 id="titulo" class="modal-title" id="exampleModalLabel"></h5>
+        <button id="close" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="body">
+        
+      </div>
+      <div class="modal-footer">
+        <button id="confirmar" type="button" class="btn btn-info">Confirmar</button>
+        <button id="entendi" type="button" class="btn btn-info">Entendi</button>
+        <button id="cancelar" type="button" class="btn btn-info">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>

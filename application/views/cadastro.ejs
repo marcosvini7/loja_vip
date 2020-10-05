@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+		<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+		<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
+		<link rel="stylesheet" type="text/css" href="/css/style.css">
+
+		<% 
+			var nome 
+			
+			if(nome == undefined){
+				nome = ''
+			} else {
+				nome = nome.split(' ')[0]
+			}
+		%>
+
+		<title>Loja Vip</title>
+
+		<script type="text/javascript">
+				
+				$(() => {
+					$('#botao_cep').click((e) => {
+						e.preventDefault()
+						var cep = $('#cep').val()					
+						if(cep != ''){
+							$.ajax({
+								url: `https://viacep.com.br/ws/${cep}/json/`,
+								type: 'get',
+								success: dados => {
+									$('#cep_invalido').addClass('d-none')
+									$('#uf').val(dados.uf)
+									$('#cidade').val(dados.localidade)
+									$('#bairro').val(dados.bairro)
+									$('#logradouro').val(dados.logradouro)
+								},
+								error: dados => {
+									$('#cep_invalido').removeClass('d-none')
+								}
+							})
+						}
+					})
+				})
+
+		</script>
+
+
+	</head>
+
+	<body>
+		<nav class="navbar navbar-expand-lg navbar-light bg-yellow">
+		  <a class="navbar-brand" href="/">
+		  	<h4 class="logo">Loja Vip</h4>
+		  </a>
+		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+		    <span class="navbar-toggler-icon"></span>
+		  </button>
+		  <div class="collapse navbar-collapse" id="navbarNavDropdown">
+		    <ul class="navbar-nav ml-auto margem_navbar">
+		      <li class="nav-item">
+		        <a class="nav-link" href="/produtos">
+		          <h6>Produtos</h5>
+		        </a>
+		      </li>
+		      <li class="nav-item">
+		        <a class="nav-link" href="/categorias">
+		          <h6>Categorias</h6>
+		    	</a>
+		      </li>
+		      <li class="nav-item dropdown">
+		        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		          <h6 class="inline">
+		          	<%=nome%>
+		          	<i class="far fa-user text-info"></i>
+		          </h6>
+		        </a>
+		         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+		          <a class="dropdown-item" href="/login">Login/Cadastro</a>
+		          <a class="dropdown-item" href="/favoritos">Favoritos</a>
+		          <a class="dropdown-item" href="/pedidos">Pedidos</a>
+		          <div class="dropdown-divider"></div>
+		          <a class="dropdown-item" href="/sair">Sair</a>
+		        </div>
+		      </li>  
+		      <li class="nav-item">  
+		      	<a href="/carrinho" class="nav-link">
+			      	<h5 class="inline">
+			          	<i class="fas fa-shopping-cart text-info mouse"></i>
+			      	</h5>
+			      </a>
+		       </li>
+		    </ul>	
+		</nav> 
+
+		<div class="text-center mt-5">
+			<h4>Cadastre-se Aqui</h4>
+		</div>
+
+		<div class="container">
+			<div class="d-flex justify-content-center">
+				<form action="/cadastrar" method="post" class="card p-4 col-lg-6 col-12">
+
+					<% 
+						var errors	
+						if(errors != undefined){ 
+					%>
+							<div class="alert alert-danger">
+								<ul>
+									<% errors.forEach(error => { %>
+										<li><%=error%></li>
+									<% })%>
+								</ul>
+							</div>
+					<% } %>
+
+					<h5>Nome Completo: </h5>
+					<input type="text" name="nome" class="form-control">
+					<h5>Email:</h5>
+					<input type="email" name="email" class="form-control">
+					<h5>Senha:</h5>
+					<input type="password" name="senha" class="form-control">
+
+					<hr>
+					<h5 class="text-center">Dados de Endereço</h5>
+					<hr>
+
+					<h5>CEP: </h5>
+					<div class="d-flex">
+						<input id="cep" type="number" name="cep" class="form-control col-10">
+						<button id="botao_cep" class="btn btn-light ml-2">
+							<i class="fas fa-search"></i> 
+						</button>
+					</div>
+					<p id="cep_invalido" class="text-danger d-none">
+						CEP inválido
+					</p>
+
+					<h5>UF: </h5>
+					<input id="uf" type="text" readonly name="uf" class="form-control">
+					<h5>Cidade: </h5>
+					<input id="cidade" type="text" readonly name="cidade" class="form-control">
+					<h5>Bairro: </h5>
+					<input id="bairro" type="text" readonly name="bairro" class="form-control">
+					<h5>Logradouro: </h5>
+					<input id="logradouro" type="text" readonly name="logradouro" class="form-control">
+					<h5>Complemento(Opcional): </h5>
+					<input type="text" name="complemento" class="form-control">
+
+					<hr>
+					<h5 class="text-center">Dados de Contato</h5>
+					<hr>
+
+					<h5>Celular: </h5>
+					<input type="number" name="celular" class="form-control">
+					<h5>Telefone(Opcional): </h5>
+					<input type="number" name="telefone" class="form-control">
+
+					<button type="submit" class="btn btn-primary mt-3">
+						Cadastrar
+					</button>
+
+					<h5 class="mt-3">
+						Já tem uma conta?</br>
+						<a href="/login">Entre por aqui</a>
+					</h5>
+					
+				</form>
+			</div>
+		</div>
+
+	</body>
+</html>

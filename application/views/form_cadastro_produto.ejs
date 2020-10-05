@@ -1,0 +1,34 @@
+
+	<form  action="<%=url%>" method="post" 
+				enctype="multipart/form-data">
+
+					<% if(url == '/admin/editar_produto'){ %>
+						<input type="hidden" id="id" 
+						name="id">
+						<input type="hidden" id="imagem_anterior" name="imagem_anterior">
+
+					<% } %>
+
+					<h5>Título: </h5>
+					<input id="titulo" type="text" name="titulo" class="form-control" placeholder="Título do produto...">
+					<h5>Imagem: </h5>
+					<input id="imagem" type="file" name="imagem" class="form-control">
+					<h5>Resumo: </h5>
+					<input id="resumo" type="text" name="resumo" class="form-control" placeholder="Descrição resumida sobre o produto, até 100 caracteres">
+					<h5>Categoria:</h5>
+					<select id="categoria" class="form-control" name="categoria">
+						<option value="">Selecione a categoria</option>
+						<option value="moveis">Móveis</option>
+						<option value="eletrodomesticos">Eletrodomésticos</option>
+						<option value="informatica">Informática</option>
+						<option value="decoracoes">Decoração</option>
+						<option value="ferramentas">Ferramentas</option>
+					</select>
+					<h5>Descrição: </h5>
+					<textarea id="descricao" name="descricao" class="form-control" placeholder="Descrição detalhado sobre o produto"></textarea>
+					<h5>Valor: </h5>
+					<input id="valor" type="number" name="valor" class="form-control" placeholder="Preço do produto em reais">
+					<h5>Quantidade: </h5>
+					<input id="quantidade" type="number" name="quantidade" class="form-control" placeholder="Quantidade do produto...">
+					<input type="submit" class="form-control btn btn-primary mt-2" value="Enviar">
+			</form>
